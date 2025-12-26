@@ -1,0 +1,68 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath> // For abs()
+#include <climits> // For INT_MAX
+
+using namespace std;
+
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        
+        // Initialize with the sum of the first three elements
+        // This ensures we have a valid starter value.
+        int closestSum = nums[0] + nums[1] + nums[2];
+        int n = nums.size();
+
+        for (int i = 0; i < n - 2; i++) {
+            int left = i + 1;
+            int right = n - 1;
+
+            while (left < right) {
+                int currentSum = nums[i] + nums[left] + nums[right];
+
+                // If currentSum is exactly target, we can't get closer than 0 difference.
+                if (currentSum == target) {
+                    return currentSum;
+                }
+
+                // Check if currentSum is closer to target than our previous closestSum
+                if (abs(target - currentSum) < abs(target - closestSum)) {
+                    closestSum = currentSum;
+                }
+
+                // Move pointers
+                if (currentSum < target) {
+                    left++; // We need a bigger sum
+                } else {
+                    right--; // We need a smaller sum
+                }
+            }
+        }
+        return closestSum;
+    }
+};
+
+// --- BOILERPLATE MAIN FUNCTION ---
+int main() {
+    Solution sol;
+
+    // Test Case 1
+    vector<int> nums1 = {-1, 2, 1, -4};
+    int target1 = 1;
+    cout << "Test Case 1: " << sol.threeSumClosest(nums1, target1) << " (Expected: 2)" << endl;
+
+    // Test Case 2
+    vector<int> nums2 = {0, 0, 0};
+    int target2 = 1;
+    cout << "Test Case 2: " << sol.threeSumClosest(nums2, target2) << " (Expected: 0)" << endl;
+    
+    // Test Case 3
+    vector<int> nums3 = {1, 1, 1, 0};
+    int target3 = -100;
+    cout << "Test Case 3: " << sol.threeSumClosest(nums3, target3) << " (Expected: 2)" << endl;
+
+    return 0;
+}
